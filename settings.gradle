@@ -1,0 +1,5 @@
+rootProject.name = 'metrics-projects'
+include 'metrics-collector'
+include 'metrics-api'
+include 'metrics-agent'
+

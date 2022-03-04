@@ -1,0 +1,53 @@
+plugins {
+	id 'org.springframework.boot' version '2.5.5'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id "io.freefair.lombok" version "6.2.0"
+	id 'java'
+}
+
+group = 'com.forto.metrics'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('springCloudVersion', "2020.0.4")
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	implementation 'org.springframework.cloud:spring-cloud-stream'
+
+	// Logging
+	implementation 'ch.qos.logback.contrib:logback-json-classic:0.1.5'
+	implementation 'ch.qos.logback.contrib:logback-jackson:0.1.5'
+	implementation 'net.logstash.logback:logstash-logback-encoder:6.6'
+
+	// Metrics
+	runtimeOnly 'io.micrometer:micrometer-registry-statsd'
+
+	// Kinesis
+	implementation 'org.springframework.cloud:spring-cloud-stream-binder-kinesis:2.2.0'
+
+	// Cassandra
+	implementation 'org.springframework.boot:spring-boot-starter-data-cassandra'
+
+	// Lombok
+	implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+test {
+	useJUnitPlatform()
+}

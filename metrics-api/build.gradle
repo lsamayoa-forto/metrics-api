@@ -1,0 +1,67 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.5.5'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id "io.freefair.lombok" version "6.2.0"
+}
+
+group = 'com.forto.metrics'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+ext.mainClass = 'com.forto.metrics.api.MetricsApiApplication'
+
+springBoot {
+    mainClass = 'com.forto.metrics.api.MetricsApiApplication'
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    set('springCloudVersion', "2020.0.4")
+}
+
+dependencies {
+    implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
+
+    implementation 'org.springframework.cloud:spring-cloud-starter-config'
+
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Logging
+    implementation 'ch.qos.logback.contrib:logback-json-classic:0.1.5'
+    implementation 'ch.qos.logback.contrib:logback-jackson:0.1.5'
+    implementation 'net.logstash.logback:logstash-logback-encoder:6.6'
+
+    // Cassandra
+    implementation 'org.springframework.boot:spring-boot-starter-data-cassandra'
+
+    // Metrics
+    runtimeOnly 'io.micrometer:micrometer-registry-statsd'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.21.0'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.8.1'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.12.4'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+allprojects {
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked"
+        }
+    }
+}
